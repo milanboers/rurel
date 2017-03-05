@@ -2,7 +2,17 @@
 name = "rurel"
 version = "0.1.0"
 authors = ["Milan Boers <mail@milanboers.nl>"]
+description = "Flexible, reusable reinforcement learning (Q learning) implementation"
+documentation = "https://github.com/milanboers/rurel"
+homepage = "https://github.com/milanboers/rurel"
+repository = "https://github.com/milanboers/rurel"
+readme = "README.md"
+keywords = ["reinforcement", "q", "learning"]
+categories = ["Science", "Algorithms"]
 license = "MPL-2.0"
+
+[badges]
+travis-ci = { repository = "milanboers/rurel", branch = "master" }
 
 [dependencies]
 rand = "0.3"
