@@ -1,5 +1,15 @@
 # Rurel
+
+[![Build Status](https://travis-ci.org/milanboers/rurel.svg?branch=master)](https://travis-ci.org/milanboers/rurel)
+[![crates.io](https://img.shields.io/crates/v/rurel.svg)](https://crates.io/crates/rurel)
+
 Rurel is a flexible, reusable reinforcement learning (Q learning) implementation in Rust.
+
+In Cargo.toml:
+```
+rurel = "0.1.0"
+```
+
 
 An example is included. This teaches an agent on a 21x21 grid how to arrive at 10,10, using actions (go left, go up, go right, go down):
 ```
@@ -20,6 +30,8 @@ Let's implement the example in `cargo run --example eucdist`. We want to make an
 First, let's define a `State`, which should represent a position on a 21x21, and the correspoding Action, which is either up, down, left or right.
 
 ```rust
+use rurel::mdp::{State, Agent};
+
 #[derive(PartialEq, Eq, Hash, Clone)]
 struct MyState { x: i32, y: i32 }
 #[derive(PartialEq, Eq, Hash, Clone)]
@@ -44,6 +56,10 @@ impl State for MyState {
 Then define the agent:
 
 ```rust
+use rurel::AgentTrainer;
+use rurel::strategy::learn::q::QLearning;
+use rurel::strategy::explore::random::RandomExploration;
+
 struct MyAgent { state: MyState }
 impl Agent<MyState> for MyAgent {
 	fn current_state(&self) -> {
