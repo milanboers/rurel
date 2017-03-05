@@ -1,0 +1,71 @@
+# Rurel
+Rurel is a flexible, reusable reinforcement learning (Q learning) implementation in Rust.
+
+An example is included. This teaches an agent on a 21x21 grid how to arrive at 10,10, using actions (go left, go up, go right, go down):
+```
+cargo run --example eucdist
+```
+
+## Getting started
+There are two main traits you need to implement: `rurel::mdp::State` and `rurel::mdp::Agent`.
+
+A `State` is something which defines a `Vec` of actions that can be taken from this state, and has a certain reward. A `State` needs to define the corresponding `Action` type.
+
+An `Agent` is something which has a current state, and given an action, can take the action and evaluate the next state.
+
+### Example
+
+Let's implement the example in `cargo run --example eucdist`. We want to make an agent which is taught how to arrive at 10,10 on a 21x21 grid.
+
+First, let's define a `State`, which should represent a position on a 21x21, and the correspoding Action, which is either up, down, left or right.
+
+```rust
+#[derive(PartialEq, Eq, Hash, Clone)]
+struct MyState { x: i32, y: i32 }
+#[derive(PartialEq, Eq, Hash, Clone)]
+struct MyAction { dx: i32, dy: i32 }
+
+impl State for MyState {
+	type Action = MyAction;
+	fn reward(&self) -> f64 {
+		// Negative Euclidean distance
+		-(((10 - self.x).pow(2) + (10 - self.y).pow(2) as f64).sqrt())
+	}
+	fn actions(&self) -> Vec<MyAction> {
+		vec![MyAction { dx: 0, dy: -1 },	// up
+			 MyAction { dx: 0, dy: 1 },	// down
+			 MyAction { dx: -1, dy: 0 },	// left
+			 MyAction { dx: 1, dy: 0 },	// right
+		]
+	}
+}
+```
+
+Then define the agent:
+
+```rust
+struct MyAgent { state: MyState }
+impl Agent<MyState> for MyAgent {
+	fn current_state(&self) -> {
+		&self.state
+	}
+	fn take_action(&mut self, action: &MyAction) -> () {
+		match action {
+			&MyAction { dx, dy } => {
+				self.state = MyState {
+					x: (((self.state.x + dx) % 21) + 21) % 21, // (x+dx) mod 21
+					y: (((self.state.y + dy) % 21) + 21) % 21, // (y+dy) mod 21
+				}
+			}
+		}
+	}
+}
+```
+
+That's all. Now make a trainer and train the agent with Q learning, with learning rate 0.2, discount factor 0.01 and an initial value of Q of 2.0. We let the trainer run for 100000 iterations, randomly exploring new states.
+
+```rust
+let mut trainer = AgentTrainer::new();
+let mut agent = MyAgent { state: MyState { x: 0, y: 0 }};
+trainer.train(&RandomExploration::new(), &QLearning::new(0.2, 0.01, 2.), &mut agent, 100000);
+```
