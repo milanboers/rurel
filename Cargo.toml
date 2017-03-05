@@ -1,0 +1,12 @@
+[package]
+name = "rurel"
+version = "0.1.0"
+authors = ["Milan Boers <mail@milanboers.nl>"]
+license = "MPL-2.0"
+
+[dependencies]
+rand = "0.3"
+
+[[example]]
+name = "eucdist"
+path = "src/examples/eucdist.rs"
