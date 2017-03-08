@@ -41,7 +41,7 @@ impl State for MyState {
 	type Action = MyAction;
 	fn reward(&self) -> f64 {
 		// Negative Euclidean distance
-		-(((10 - self.x).pow(2) + (10 - self.y).pow(2) as f64).sqrt())
+		-((((10 - self.x).pow(2) + (10 - self.y).pow(2)) as f64).sqrt())
 	}
 	fn actions(&self) -> Vec<MyAction> {
 		vec![MyAction { dx: 0, dy: -1 },	// up
@@ -62,7 +62,7 @@ use rurel::strategy::explore::random::RandomExploration;
 
 struct MyAgent { state: MyState }
 impl Agent<MyState> for MyAgent {
-	fn current_state(&self) -> {
+	fn current_state(&self) -> &MyState {
 		&self.state
 	}
 	fn take_action(&mut self, action: &MyAction) -> () {
