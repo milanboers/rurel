@@ -5,6 +5,8 @@
 
 Rurel is a flexible, reusable reinforcement learning (Q learning) implementation in Rust.
 
+* [Release documentation](https://docs.rs/rurel)
+
 In Cargo.toml:
 ```
 rurel = "0.1.0"
