@@ -5,7 +5,7 @@
 //! Rurel is a flexible, reusable reinforcement learning (Q learning) implementation in Rust.
 //!
 //! Implement the [Agent](mdp/trait.Agent.html) and [State](mdp/trait.State.html) traits for your
-//! model, then create an [AgentTrainer](struct.AgentTrainer.html) and train it for your model.
+//! process, then create an [AgentTrainer](struct.AgentTrainer.html) and train it for your process.
 //!
 //! # Basic Example
 //!
@@ -82,9 +82,9 @@ use strategy::explore::ExplorationStrategy;
 use strategy::learn::LearningStrategy;
 
 /// An `AgentTrainer` can be trained for using a certain [Agent](mdp/trait.Agent.html). After
-/// training, the `AgentTrainer` contains learned knowledge about the model, and can be queried for
-/// this. For example, you can ask the `AgentTrainer` the expected values of all possible actions
-/// in a given state.
+/// training, the `AgentTrainer` contains learned knowledge about the process, and can be queried
+/// for this. For example, you can ask the `AgentTrainer` the expected values of all possible
+/// actions in a given state.
 pub struct AgentTrainer<S>
     where S: State
 {
