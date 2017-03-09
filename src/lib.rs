@@ -63,7 +63,10 @@
 //!
 //! let mut trainer = AgentTrainer::new();
 //! let mut agent = MyAgent { state: MyState { x: 0, y: 0 }};
-//! trainer.train(&mut agent, &mut FixedIterations::new(100000), &QLearning::new(0.2, 0.01, 2.), &RandomExploration::new());
+//! trainer.train(&mut agent,
+//!               &mut FixedIterations::new(100000),
+//!               &QLearning::new(0.2, 0.01, 2.),
+//!               &RandomExploration::new());
 //!
 //! // Test to see if it worked
 //! let test_state = MyState { x: 10, y: 9 };
