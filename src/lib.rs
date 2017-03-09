@@ -128,7 +128,7 @@ impl<S> AgentTrainer<S>
                  -> () {
         loop {
             let s_t = agent.current_state().clone();
-            let action = exploration_strategy.take_action(agent);
+            let action = exploration_strategy.pick_action(agent);
 
             // current action value
             let s_t_next = agent.current_state();
