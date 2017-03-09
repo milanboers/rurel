@@ -64,8 +64,8 @@
 //! let mut trainer = AgentTrainer::new();
 //! let mut agent = MyAgent { state: MyState { x: 0, y: 0 }};
 //! trainer.train(&mut agent,
-//!               &mut FixedIterations::new(100000),
 //!               &QLearning::new(0.2, 0.01, 2.),
+//!               &mut FixedIterations::new(100000),
 //!               &RandomExploration::new());
 //!
 //! // Test to see if it worked
@@ -122,8 +122,8 @@ impl<S> AgentTrainer<S>
     /// `Agent` for `iters` iterations.
     pub fn train(&mut self,
                  agent: &mut Agent<S>,
-                 termination_strategy: &mut TerminationStrategy<S>,
                  learning_strategy: &LearningStrategy<S>,
+                 termination_strategy: &mut TerminationStrategy<S>,
                  exploration_strategy: &ExplorationStrategy<S>)
                  -> () {
         loop {

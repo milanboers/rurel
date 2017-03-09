@@ -88,7 +88,10 @@ use rurel::strategy::terminate::FixedIterations;
 
 let mut trainer = AgentTrainer::new();
 let mut agent = MyAgent { state: MyState { x: 0, y: 0 }};
-trainer.train(&mut agent, &mut FixedIterations::new(100000), &QLearning::new(0.2, 0.01, 2.), &RandomExploration::new());
+trainer.train(&mut agent,
+              &QLearning::new(0.2, 0.01, 2.),
+              &mut FixedIterations::new(100000),
+              &RandomExploration::new());
 ```
 
 After this, you can query the learned value (Q) for a certain action in a certain state by:

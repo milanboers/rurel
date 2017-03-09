@@ -74,8 +74,8 @@ fn main() {
     let mut trainer = AgentTrainer::new();
     let mut agent = MyAgent { state: initial_state.clone() };
     trainer.train(&mut agent,
-                  &mut FixedIterations::new(100000),
                   &QLearning::new(0.2, 0.01, 2.),
+                  &mut FixedIterations::new(100000),
                   &RandomExploration::new());
     for i in 0..21 {
         for j in 0..21 {
