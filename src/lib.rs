@@ -123,6 +123,12 @@ where
     pub fn import_state(&mut self, q: HashMap<S, HashMap<S::A, f64>>) {
         self.q = q;
     }
+    /// Returns the best action for the given `State`, or `None` if no values were learned.
+    pub fn best_action(&self, state: &S) -> Option<S::A> {
+        self.expected_values(state)
+            .and_then(|m| m.iter().max_by(|&(_,v1),&(_,v2)| v1.partial_cmp(v2).unwrap()))
+            .map(|t| t.0.clone())
+    }
     /// Trains this [AgentTrainer] using the given [ExplorationStrategy], [LearningStrategy] and
     /// [Agent] until the [TerminationStrategy] decides to stop.
     pub fn train(
