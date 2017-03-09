@@ -2,10 +2,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+//! Module for the Q Learning strategy.
+
 use std::collections::HashMap;
 use mdp::State;
 use strategy::learn::LearningStrategy;
 
+/// The Q Learning strategy
 pub struct QLearning {
     alpha: f64,
     gamma: f64,
@@ -13,6 +16,8 @@ pub struct QLearning {
 }
 
 impl QLearning {
+    /// Constructs the Q Learning strategy, with learning rate `alpha`, discount factor `gamma` and
+    /// the initial value for Q `initial_value`.
     pub fn new(alpha: f64, gamma: f64, initial_value: f64) -> QLearning {
         QLearning {
             alpha: alpha,

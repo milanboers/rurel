@@ -5,6 +5,9 @@
 use mdp::{State, Agent};
 use strategy::explore::ExplorationStrategy;
 
+/// The random exploration strategy. This strategy always takes a random action, as defined for the
+/// Agent by
+/// [Agent::take_random_action()](../../../mdp/trait.Agent.html#method.take_random_action)
 pub struct RandomExploration;
 
 impl RandomExploration {
