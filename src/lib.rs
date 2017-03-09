@@ -25,7 +25,7 @@
 //! struct MyAction { dx: i32, dy: i32 }
 //!
 //! impl State for MyState {
-//!     type Action = MyAction;
+//!     type A = MyAction;
 //!     fn reward(&self) -> f64 {
 //!         // Negative Euclidean distance
 //!         -((((10 - self.x).pow(2) + (10 - self.y).pow(2)) as f64).sqrt())
@@ -39,9 +39,8 @@
 //!     }
 //! }
 //!
-//! use rurel::AgentTrainer;
-//! use rurel::strategy::learn::q::QLearning;
-//! use rurel::strategy::explore::random::RandomExploration;
+//! use rurel::strategy::learn::QLearning;
+//! use rurel::strategy::explore::RandomExploration;
 //!
 //! struct MyAgent { state: MyState }
 //! impl Agent<MyState> for MyAgent {
@@ -59,6 +58,8 @@
 //!         }
 //!     }
 //! }
+//!
+//! use rurel::AgentTrainer;
 //!
 //! let mut trainer = AgentTrainer::new();
 //! let mut agent = MyAgent { state: MyState { x: 0, y: 0 }};
@@ -88,7 +89,7 @@ use strategy::learn::LearningStrategy;
 pub struct AgentTrainer<S>
     where S: State
 {
-    q: HashMap<S, HashMap<S::Action, f64>>,
+    q: HashMap<S, HashMap<S::A, f64>>,
 }
 
 impl<S> AgentTrainer<S>
@@ -99,13 +100,13 @@ impl<S> AgentTrainer<S>
     }
     /// Fetches the learned values for the given state, by `Action`, or `None` if no value was
     /// learned.
-    pub fn expected_values(&self, state: &S) -> Option<&HashMap<S::Action, f64>> {
+    pub fn expected_values(&self, state: &S) -> Option<&HashMap<S::A, f64>> {
         // XXX: make associated const with empty map and remove Option?
         self.q.get(state)
     }
     /// Fetches the learned value for the given `Action` in the given `State`, or `None` if no
     /// value was learned.
-    pub fn expected_value(&self, state: &S, action: &S::Action) -> Option<f64> {
+    pub fn expected_value(&self, state: &S, action: &S::A) -> Option<f64> {
         self.q
             .get(state)
             .and_then(|m| {

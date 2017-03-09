@@ -9,8 +9,8 @@ use std::collections::HashMap;
 
 use rurel::mdp::{State, Agent};
 use rurel::AgentTrainer;
-use rurel::strategy::learn::q::QLearning;
-use rurel::strategy::explore::random::RandomExploration;
+use rurel::strategy::learn::QLearning;
+use rurel::strategy::explore::RandomExploration;
 
 #[derive(PartialEq, Eq, Hash, Clone)]
 struct MyState {
@@ -26,7 +26,7 @@ enum MyAction {
 }
 
 impl State for MyState {
-    type Action = MyAction;
+    type A = MyAction;
     fn reward(&self) -> f64 {
         let (tx, ty) = (10, 10);
         let d = (((tx - self.x).pow(2) + (ty - self.y).pow(2)) as f64).sqrt();

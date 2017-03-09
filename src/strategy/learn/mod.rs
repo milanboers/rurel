@@ -4,9 +4,11 @@
 
 pub mod q;
 
+pub use self::q::QLearning;
+
 use std::collections::HashMap;
 use mdp::State;
 
 pub trait LearningStrategy<S: State> {
-    fn value(&self, &Option<&HashMap<S::Action, f64>>, &Option<&f64>, f64) -> f64;
+    fn value(&self, &Option<&HashMap<S::A, f64>>, &Option<&f64>, f64) -> f64;
 }

@@ -4,8 +4,10 @@
 
 pub mod random;
 
+pub use self::random::RandomExploration;
+
 use mdp::{State, Agent};
 
 pub trait ExplorationStrategy<S: State> {
-    fn take_action(&self, &mut Agent<S>) -> S::Action;
+    fn take_action(&self, &mut Agent<S>) -> S::A;
 }

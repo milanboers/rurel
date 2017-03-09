@@ -14,7 +14,7 @@ impl RandomExploration {
 }
 
 impl<S: State> ExplorationStrategy<S> for RandomExploration {
-    fn take_action(&self, agent: &mut Agent<S>) -> S::Action {
+    fn take_action(&self, agent: &mut Agent<S>) -> S::A {
         agent.take_random_action()
     }
 }

@@ -59,8 +59,8 @@ Then define the agent:
 
 ```rust
 use rurel::AgentTrainer;
-use rurel::strategy::learn::q::QLearning;
-use rurel::strategy::explore::random::RandomExploration;
+use rurel::strategy::learn::QLearning;
+use rurel::strategy::explore::RandomExploration;
 
 struct MyAgent { state: MyState }
 impl Agent<MyState> for MyAgent {

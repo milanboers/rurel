@@ -24,7 +24,7 @@ impl QLearning {
 
 impl<S: State> LearningStrategy<S> for QLearning {
     fn value(&self,
-             new_action_values: &Option<&HashMap<S::Action, f64>>,
+             new_action_values: &Option<&HashMap<S::A, f64>>,
              old_value: &Option<&f64>,
              reward_after_action: f64)
              -> f64 {
