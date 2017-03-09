@@ -72,10 +72,10 @@ fn main() {
     };
     let mut trainer = AgentTrainer::new();
     let mut agent = MyAgent { state: initial_state.clone() };
-    trainer.train(&RandomExploration::new(),
+    trainer.train(&mut agent,
+                  100000,
                   &QLearning::new(0.2, 0.01, 2.),
-                  &mut agent,
-                  100000);
+                  &RandomExploration::new());
     for i in 0..21 {
         for j in 0..21 {
             let entry: &HashMap<MyAction, f64> = trainer.expected_values(&MyState {

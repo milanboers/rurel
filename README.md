@@ -85,7 +85,7 @@ That's all. Now make a trainer and train the agent with Q learning, with learnin
 ```rust
 let mut trainer = AgentTrainer::new();
 let mut agent = MyAgent { state: MyState { x: 0, y: 0 }};
-trainer.train(&RandomExploration::new(), &QLearning::new(0.2, 0.01, 2.), &mut agent, 100000);
+trainer.train(&mut agent, 100000, &QLearning::new(0.2, 0.01, 2.), &RandomExploration::new());
 ```
 
 After this, you can query the learned value (Q) for a certain action in a certain state by:

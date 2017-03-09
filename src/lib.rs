@@ -63,7 +63,7 @@
 //!
 //! let mut trainer = AgentTrainer::new();
 //! let mut agent = MyAgent { state: MyState { x: 0, y: 0 }};
-//! trainer.train(&RandomExploration::new(), &QLearning::new(0.2, 0.01, 2.), &mut agent, 100000);
+//! trainer.train(&mut agent, 100000, &QLearning::new(0.2, 0.01, 2.), &RandomExploration::new());
 //!
 //! // Test to see if it worked
 //! let test_state = MyState { x: 10, y: 9 };
@@ -117,10 +117,10 @@ impl<S> AgentTrainer<S>
     /// Trains this `AgentTrainer` using the given `ExplorationStrategy`, `LearningStrategy` and
     /// `Agent` for `iters` iterations.
     pub fn train(&mut self,
-                 exploration_strategy: &ExplorationStrategy<S>,
-                 learning_strategy: &LearningStrategy<S>,
                  agent: &mut Agent<S>,
-                 iters: u32)
+                 iters: u32,
+                 learning_strategy: &LearningStrategy<S>,
+                 exploration_strategy: &ExplorationStrategy<S>)
                  -> () {
         for _ in 1..iters {
             let s_t = agent.current_state().clone();
