@@ -32,7 +32,7 @@ Let's implement the example in `cargo run --example eucdist`. We want to make an
 First, let's define a `State`, which should represent a position on a 21x21, and the correspoding Action, which is either up, down, left or right.
 
 ```rust
-use rurel::mdp::{State, Agent};
+use rurel::mdp::State;
 
 #[derive(PartialEq, Eq, Hash, Clone)]
 struct MyState { x: i32, y: i32 }
@@ -58,9 +58,7 @@ impl State for MyState {
 Then define the agent:
 
 ```rust
-use rurel::AgentTrainer;
-use rurel::strategy::learn::QLearning;
-use rurel::strategy::explore::RandomExploration;
+use rurel::mdp::Agent;
 
 struct MyAgent { state: MyState }
 impl Agent<MyState> for MyAgent {
@@ -83,9 +81,14 @@ impl Agent<MyState> for MyAgent {
 That's all. Now make a trainer and train the agent with Q learning, with learning rate 0.2, discount factor 0.01 and an initial value of Q of 2.0. We let the trainer run for 100000 iterations, randomly exploring new states.
 
 ```rust
+use rurel::AgentTrainer;
+use rurel::strategy::learn::QLearning;
+use rurel::strategy::explore::RandomExploration;
+use rurel::strategy::terminate::FixedIterations;
+
 let mut trainer = AgentTrainer::new();
 let mut agent = MyAgent { state: MyState { x: 0, y: 0 }};
-trainer.train(&mut agent, 100000, &QLearning::new(0.2, 0.01, 2.), &RandomExploration::new());
+trainer.train(&mut agent, &mut FixedIterations::new(100000), &QLearning::new(0.2, 0.01, 2.), &RandomExploration::new());
 ```
 
 After this, you can query the learned value (Q) for a certain action in a certain state by:

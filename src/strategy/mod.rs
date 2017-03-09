@@ -4,3 +4,4 @@
 
 pub mod learn;
 pub mod explore;
+pub mod terminate;

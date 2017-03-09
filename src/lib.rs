@@ -39,9 +39,6 @@
 //!     }
 //! }
 //!
-//! use rurel::strategy::learn::QLearning;
-//! use rurel::strategy::explore::RandomExploration;
-//!
 //! struct MyAgent { state: MyState }
 //! impl Agent<MyState> for MyAgent {
 //!     fn current_state(&self) -> &MyState {
@@ -60,10 +57,13 @@
 //! }
 //!
 //! use rurel::AgentTrainer;
+//! use rurel::strategy::learn::QLearning;
+//! use rurel::strategy::explore::RandomExploration;
+//! use rurel::strategy::terminate::FixedIterations;
 //!
 //! let mut trainer = AgentTrainer::new();
 //! let mut agent = MyAgent { state: MyState { x: 0, y: 0 }};
-//! trainer.train(&mut agent, 100000, &QLearning::new(0.2, 0.01, 2.), &RandomExploration::new());
+//! trainer.train(&mut agent, &mut FixedIterations::new(100000), &QLearning::new(0.2, 0.01, 2.), &RandomExploration::new());
 //!
 //! // Test to see if it worked
 //! let test_state = MyState { x: 10, y: 9 };
@@ -81,6 +81,7 @@ use std::collections::HashMap;
 use mdp::{Agent, State};
 use strategy::explore::ExplorationStrategy;
 use strategy::learn::LearningStrategy;
+use strategy::terminate::TerminationStrategy;
 
 /// An `AgentTrainer` can be trained for using a certain [Agent](mdp/trait.Agent.html). After
 /// training, the `AgentTrainer` contains learned knowledge about the process, and can be queried
@@ -118,11 +119,11 @@ impl<S> AgentTrainer<S>
     /// `Agent` for `iters` iterations.
     pub fn train(&mut self,
                  agent: &mut Agent<S>,
-                 iters: u32,
+                 termination_strategy: &mut TerminationStrategy<S>,
                  learning_strategy: &LearningStrategy<S>,
                  exploration_strategy: &ExplorationStrategy<S>)
                  -> () {
-        for _ in 1..iters {
+        loop {
             let s_t = agent.current_state().clone();
             let action = exploration_strategy.take_action(agent);
 
@@ -136,6 +137,10 @@ impl<S> AgentTrainer<S>
             };
 
             self.q.entry(s_t).or_insert_with(|| HashMap::new()).insert(action, v);
+
+            if termination_strategy.should_stop(&s_t_next) {
+                break;
+            }
         }
     }
 }

@@ -11,6 +11,7 @@ use rurel::mdp::{State, Agent};
 use rurel::AgentTrainer;
 use rurel::strategy::learn::QLearning;
 use rurel::strategy::explore::RandomExploration;
+use rurel::strategy::terminate::FixedIterations;
 
 #[derive(PartialEq, Eq, Hash, Clone)]
 struct MyState {
@@ -73,7 +74,7 @@ fn main() {
     let mut trainer = AgentTrainer::new();
     let mut agent = MyAgent { state: initial_state.clone() };
     trainer.train(&mut agent,
-                  100000,
+                  &mut FixedIterations::new(100000),
                   &QLearning::new(0.2, 0.01, 2.),
                   &RandomExploration::new());
     for i in 0..21 {
