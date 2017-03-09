@@ -1,6 +1,6 @@
 [package]
 name = "rurel"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Milan Boers <mail@milanboers.nl>"]
 description = "Flexible, reusable reinforcement learning (Q learning) implementation"
 documentation = "https://docs.rs/rurel"
