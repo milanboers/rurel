@@ -21,7 +21,7 @@ cargo run --example eucdist
 ## Getting started
 There are two main traits you need to implement: `rurel::mdp::State` and `rurel::mdp::Agent`.
 
-A `State` is something which defines a `Vec` of actions that can be taken from this state, and has a certain reward. A `State` needs to define the corresponding `Action` type.
+A `State` is something which defines a `Vec` of actions that can be taken from this state, and has a certain reward. A `State` needs to define the corresponding action type `A`.
 
 An `Agent` is something which has a current state, and given an action, can take the action and evaluate the next state.
 
@@ -40,7 +40,7 @@ struct MyState { x: i32, y: i32 }
 struct MyAction { dx: i32, dy: i32 }
 
 impl State for MyState {
-	type Action = MyAction;
+	type A = MyAction;
 	fn reward(&self) -> f64 {
 		// Negative Euclidean distance
 		-((((10 - self.x).pow(2) + (10 - self.y).pow(2)) as f64).sqrt())
