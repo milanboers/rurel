@@ -80,8 +80,8 @@
 pub mod mdp;
 pub mod strategy;
 
-use std::collections::HashMap;
 use mdp::{Agent, State};
+use std::collections::HashMap;
 use strategy::explore::ExplorationStrategy;
 use strategy::learn::LearningStrategy;
 use strategy::terminate::TerminationStrategy;
@@ -91,13 +91,15 @@ use strategy::terminate::TerminationStrategy;
 /// for this. For example, you can ask the `AgentTrainer` the expected values of all possible
 /// actions in a given state.
 pub struct AgentTrainer<S>
-    where S: State
+where
+    S: State,
 {
     q: HashMap<S, HashMap<S::A, f64>>,
 }
 
 impl<S> AgentTrainer<S>
-    where S: State
+where
+    S: State,
 {
     pub fn new() -> AgentTrainer<S> {
         AgentTrainer { q: HashMap::new() }
@@ -111,21 +113,25 @@ impl<S> AgentTrainer<S>
     /// Fetches the learned value for the given `Action` in the given `State`, or `None` if no
     /// value was learned.
     pub fn expected_value(&self, state: &S, action: &S::A) -> Option<f64> {
-        self.q
-            .get(state)
-            .and_then(|m| {
-                m.get(action)
-                    .and_then(|&v| Some(v))
-            })
+        self.q.get(state).and_then(|m| m.get(action).copied())
     }
-    /// Trains this `AgentTrainer` using the given `ExplorationStrategy`, `LearningStrategy` and
-    /// `Agent` for `iters` iterations.
-    pub fn train(&mut self,
-                 agent: &mut Agent<S>,
-                 learning_strategy: &LearningStrategy<S>,
-                 termination_strategy: &mut TerminationStrategy<S>,
-                 exploration_strategy: &ExplorationStrategy<S>)
-                 -> () {
+    /// Returns a clone of the entire learned state to be saved or used elsewhere.
+    pub fn export_state(&self) -> HashMap<S, HashMap<S::A, f64>> {
+        self.q.clone()
+    }
+    /// Imports a state, completely replacing any learned progress
+    pub fn import_state(&mut self, q: HashMap<S, HashMap<S::A, f64>>) {
+        self.q = q;
+    }
+    /// Trains this [AgentTrainer] using the given [ExplorationStrategy], [LearningStrategy] and
+    /// [Agent] until the [TerminationStrategy] decides to stop.
+    pub fn train(
+        &mut self,
+        agent: &mut dyn Agent<S>,
+        learning_strategy: &dyn LearningStrategy<S>,
+        termination_strategy: &mut dyn TerminationStrategy<S>,
+        exploration_strategy: &dyn ExplorationStrategy<S>,
+    ) {
         loop {
             let s_t = agent.current_state().clone();
             let action = exploration_strategy.pick_action(agent);
@@ -139,11 +145,20 @@ impl<S> AgentTrainer<S>
                 learning_strategy.value(&self.q.get(s_t_next), &old_value, r_t_next)
             };
 
-            self.q.entry(s_t).or_insert_with(|| HashMap::new()).insert(action, v);
+            self.q
+                .entry(s_t)
+                .or_insert_with(HashMap::new)
+                .insert(action, v);
 
             if termination_strategy.should_stop(&s_t_next) {
                 break;
             }
         }
+    }
+}
+
+impl<S: mdp::State> Default for AgentTrainer<S> {
+    fn default() -> Self {
+        Self::new()
     }
 }

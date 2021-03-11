@@ -17,10 +17,7 @@ pub struct FixedIterations {
 impl FixedIterations {
     /// Constructs a new termination strategy which ends when `iters` value updates have occurred.
     pub fn new(iters: u32) -> FixedIterations {
-        FixedIterations {
-            i: 0,
-            iters: iters,
-        }
+        FixedIterations { i: 0, iters }
     }
 }
 
