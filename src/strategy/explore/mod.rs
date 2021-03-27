@@ -8,11 +8,11 @@ pub mod random;
 
 pub use self::random::RandomExploration;
 
-use mdp::{State, Agent};
+use mdp::{Agent, State};
 
 /// Trait for exploration strategies. An exploration strategy decides, based on an `Agent`, which
 /// action to take next.
 pub trait ExplorationStrategy<S: State> {
     /// Selects the next action to take for this `Agent`.
-    fn pick_action(&self, &mut Agent<S>) -> S::A;
+    fn pick_action(&self, &mut dyn Agent<S>) -> S::A;
 }
