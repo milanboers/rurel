@@ -15,7 +15,7 @@ license = "MPL-2.0"
 travis-ci = { repository = "milanboers/rurel", branch = "master" }
 
 [dependencies]
-rand = "0.3"
+rand = "0.8"
 
 [[example]]
 name = "eucdist"
