@@ -8,7 +8,7 @@ homepage = "https://github.com/milanboers/rurel"
 repository = "https://github.com/milanboers/rurel"
 readme = "README.md"
 keywords = ["reinforcement", "q", "learning"]
-categories = ["Science", "Algorithms"]
+categories = ["science", "algorithms"]
 license = "MPL-2.0"
 
 [badges]
