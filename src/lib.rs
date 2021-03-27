@@ -116,7 +116,7 @@ where
         self.q.get(state).and_then(|m| m.get(action).copied())
     }
     /// Returns a clone of the entire learned state to be saved or used elsewhere.
-    pub fn export_state(&self) -> HashMap<S, HashMap<S::A, f64>> {
+    pub fn export_learned_values(&self) -> HashMap<S, HashMap<S::A, f64>> {
         self.q.clone()
     }
     /// Imports a state, completely replacing any learned progress
