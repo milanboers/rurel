@@ -7,11 +7,11 @@ extern crate rurel;
 
 use std::collections::HashMap;
 
-use rurel::mdp::{State, Agent};
-use rurel::AgentTrainer;
-use rurel::strategy::learn::QLearning;
+use rurel::mdp::{Agent, State};
 use rurel::strategy::explore::RandomExploration;
+use rurel::strategy::learn::QLearning;
 use rurel::strategy::terminate::FixedIterations;
+use rurel::AgentTrainer;
 
 #[derive(PartialEq, Eq, Hash, Clone)]
 struct MyState {
@@ -34,10 +34,12 @@ impl State for MyState {
         -d
     }
     fn actions(&self) -> Vec<MyAction> {
-        vec![MyAction::Move { dx: -1, dy: 0 },
-             MyAction::Move { dx: 1, dy: 0 },
-             MyAction::Move { dx: 0, dy: -1 },
-             MyAction::Move { dx: 0, dy: 1 }]
+        vec![
+            MyAction::Move { dx: -1, dy: 0 },
+            MyAction::Move { dx: 1, dy: 0 },
+            MyAction::Move { dx: 0, dy: -1 },
+            MyAction::Move { dx: 0, dy: 1 },
+        ]
     }
 }
 
@@ -53,10 +55,10 @@ impl Agent<MyState> for MyAgent {
         match action {
             &MyAction::Move { dx, dy } => {
                 self.state = MyState {
-                    x: (((self.state.x + dx) % self.state.maxx) + self.state.maxx) %
-                       self.state.maxx,
-                    y: (((self.state.y + dy) % self.state.maxy) + self.state.maxy) %
-                       self.state.maxy,
+                    x: (((self.state.x + dx) % self.state.maxx) + self.state.maxx)
+                        % self.state.maxx,
+                    y: (((self.state.y + dy) % self.state.maxy) + self.state.maxy)
+                        % self.state.maxy,
                     ..self.state.clone()
                 };
             }
@@ -72,14 +74,19 @@ fn main() {
         maxy: 21,
     };
     let mut trainer = AgentTrainer::new();
-    let mut agent = MyAgent { state: initial_state.clone() };
-    trainer.train(&mut agent,
-                  &QLearning::new(0.2, 0.01, 2.),
-                  &mut FixedIterations::new(100000),
-                  &RandomExploration::new());
+    let mut agent = MyAgent {
+        state: initial_state.clone(),
+    };
+    trainer.train(
+        &mut agent,
+        &QLearning::new(0.2, 0.01, 2.),
+        &mut FixedIterations::new(100000),
+        &RandomExploration::new(),
+    );
     for i in 0..21 {
         for j in 0..21 {
-            let entry: &HashMap<MyAction, f64> = trainer.expected_values(&MyState {
+            let entry: &HashMap<MyAction, f64> = trainer
+                .expected_values(&MyState {
                     x: i,
                     y: j,
                     ..initial_state

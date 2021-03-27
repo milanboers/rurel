@@ -8,8 +8,8 @@ pub mod q;
 
 pub use self::q::QLearning;
 
-use std::collections::HashMap;
 use mdp::State;
+use std::collections::HashMap;
 
 /// A learning strategy can calculate a learned value for the action which was taken from the
 /// values for the actions in the new state (`new_action_values`), the current value
@@ -18,9 +18,10 @@ pub trait LearningStrategy<S: State> {
     /// Calculates a learned value for the action which was taken from the
     /// values for the actions in the new state (`new_action_values`), the current value
     /// (`current_value`), and the reward that was received after taking the action.
-    fn value(&self,
-             new_action_values: &Option<&HashMap<S::A, f64>>,
-             current_value: &Option<&f64>,
-             received_reward: f64)
-             -> f64;
+    fn value(
+        &self,
+        new_action_values: &Option<&HashMap<S::A, f64>>,
+        current_value: &Option<&f64>,
+        received_reward: f64,
+    ) -> f64;
 }
