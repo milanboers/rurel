@@ -14,5 +14,5 @@ use mdp::{Agent, State};
 /// action to take next.
 pub trait ExplorationStrategy<S: State> {
     /// Selects the next action to take for this `Agent`.
-    fn pick_action(&self, &mut dyn Agent<S>) -> S::A;
+    fn pick_action(&self, _: &mut dyn Agent<S>) -> S::A;
 }
