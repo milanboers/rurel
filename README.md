@@ -31,7 +31,7 @@ Let's implement the example in `cargo run --example eucdist`. We want to make an
 
 First, let's define a `State`, which should represent a position on a 21x21, and the correspoding Action, which is either up, down, left or right.
 
-```rust,igonre
+```rust
 use rurel::mdp::State;
 
 #[derive(PartialEq, Eq, Hash, Clone)]
