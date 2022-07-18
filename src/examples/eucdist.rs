@@ -2,9 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-extern crate rand;
-extern crate rurel;
-
 use std::collections::HashMap;
 
 use rurel::mdp::{Agent, State};
@@ -28,11 +25,13 @@ enum MyAction {
 
 impl State for MyState {
     type A = MyAction;
+
     fn reward(&self) -> f64 {
         let (tx, ty) = (10, 10);
         let d = (((tx - self.x).pow(2) + (ty - self.y).pow(2)) as f64).sqrt();
         -d
     }
+
     fn actions(&self) -> Vec<MyAction> {
         vec![
             MyAction::Move { dx: -1, dy: 0 },
@@ -51,7 +50,8 @@ impl Agent<MyState> for MyAgent {
     fn current_state(&self) -> &MyState {
         &self.state
     }
-    fn take_action(&mut self, action: &MyAction) -> () {
+
+    fn take_action(&mut self, action: &MyAction) {
         match action {
             &MyAction::Move { dx, dy } => {
                 self.state = MyState {
@@ -93,7 +93,7 @@ fn main() {
                 })
                 .unwrap();
             let val: f64 = entry.values().sum();
-            print!("{:.3}\t", val);
+            print!("{val:.3}\t");
         }
         println!();
     }

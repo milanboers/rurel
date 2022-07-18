@@ -10,6 +10,7 @@ readme = "README.md"
 keywords = ["reinforcement", "q", "learning"]
 categories = ["science", "algorithms"]
 license = "MPL-2.0"
+edition = "2021"
 
 [badges]
 travis-ci = { repository = "milanboers/rurel", branch = "master" }

@@ -4,9 +4,10 @@
 
 //! Module for the Q Learning strategy.
 
-use mdp::State;
 use std::collections::HashMap;
-use strategy::learn::LearningStrategy;
+
+use crate::mdp::State;
+use crate::strategy::learn::LearningStrategy;
 
 /// The Q Learning strategy
 pub struct QLearning {

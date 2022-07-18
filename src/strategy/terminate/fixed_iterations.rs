@@ -4,8 +4,8 @@
 
 //! Module for the fixed iterations strategy.
 
-use mdp::State;
-use strategy::terminate::TerminationStrategy;
+use crate::mdp::State;
+use crate::strategy::terminate::TerminationStrategy;
 
 /// The termination strategy that ends after a certain number of iterations, regardless of the
 /// `State`.
