@@ -4,12 +4,12 @@
 
 //! Module containing learning (value updating) strategies.
 
-pub mod q;
+use std::collections::HashMap;
 
 pub use self::q::QLearning;
+use crate::mdp::State;
 
-use mdp::State;
-use std::collections::HashMap;
+pub mod q;
 
 /// A learning strategy can calculate a learned value for the action which was taken from the
 /// values for the actions in the new state (`new_action_values`), the current value

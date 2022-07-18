@@ -2,8 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-use mdp::{Agent, State};
-use strategy::explore::ExplorationStrategy;
+use crate::mdp::{Agent, State};
+use crate::strategy::explore::ExplorationStrategy;
 
 /// The random exploration strategy. This strategy always takes a random action, as defined for the
 /// Agent by

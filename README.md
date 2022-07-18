@@ -8,13 +8,13 @@ Rurel is a flexible, reusable reinforcement learning (Q learning) implementation
 * [Release documentation](https://docs.rs/rurel)
 
 In Cargo.toml:
-```
+```toml
 rurel = "0.2.0"
 ```
 
 
 An example is included. This teaches an agent on a 21x21 grid how to arrive at 10,10, using actions (go left, go up, go right, go down):
-```
+```console
 cargo run --example eucdist
 ```
 
@@ -31,7 +31,7 @@ Let's implement the example in `cargo run --example eucdist`. We want to make an
 
 First, let's define a `State`, which should represent a position on a 21x21, and the correspoding Action, which is either up, down, left or right.
 
-```rust
+```rust,igonre
 use rurel::mdp::State;
 
 #[derive(PartialEq, Eq, Hash, Clone)]
@@ -57,7 +57,7 @@ impl State for MyState {
 
 Then define the agent:
 
-```rust
+```rust, ignore
 use rurel::mdp::Agent;
 
 struct MyAgent { state: MyState }
@@ -80,7 +80,7 @@ impl Agent<MyState> for MyAgent {
 
 That's all. Now make a trainer and train the agent with Q learning, with learning rate 0.2, discount factor 0.01 and an initial value of Q of 2.0. We let the trainer run for 100000 iterations, randomly exploring new states.
 
-```rust
+```rust, ignore
 use rurel::AgentTrainer;
 use rurel::strategy::learn::QLearning;
 use rurel::strategy::explore::RandomExploration;
@@ -96,6 +96,9 @@ trainer.train(&mut agent,
 
 After this, you can query the learned value (Q) for a certain action in a certain state by:
 
-```rust
+```rust, ignore
 trainer.expected_value(&state, &action) // : Option<f64>
 ```
+
+## Development
+* Run `cargo +nightly fmt` to format the code.

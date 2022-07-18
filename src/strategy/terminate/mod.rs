@@ -4,11 +4,10 @@
 
 //! Module containing termination strategies.
 
-pub mod fixed_iterations;
-
 pub use self::fixed_iterations::FixedIterations;
+use crate::mdp::State;
 
-use mdp::State;
+pub mod fixed_iterations;
 
 /// A termination strategy decides when to end training.
 pub trait TerminationStrategy<S: State> {

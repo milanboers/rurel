@@ -4,11 +4,10 @@
 
 //! Module containing exploration strategies.
 
-pub mod random;
-
 pub use self::random::RandomExploration;
+use crate::mdp::{Agent, State};
 
-use mdp::{Agent, State};
+pub mod random;
 
 /// Trait for exploration strategies. An exploration strategy decides, based on an `Agent`, which
 /// action to take next.

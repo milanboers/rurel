@@ -2,8 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-extern crate rand;
-
 use std::hash::Hash;
 
 /// A `State` is something which has a reward, and has a certain set of actions associated with it.
