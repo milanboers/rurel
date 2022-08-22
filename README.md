@@ -34,9 +34,9 @@ First, let's define a `State`, which should represent a position on a 21x21, and
 ```rust
 use rurel::mdp::State;
 
-#[derive(PartialEq, Eq, Hash, Clone)]
+#[derive(PartialEq, Eq, Hash, Clone, Serialize, Deserialize)]
 struct MyState { x: i32, y: i32 }
-#[derive(PartialEq, Eq, Hash, Clone)]
+#[derive(PartialEq, Eq, Hash, Clone, Serialize, Deserialize)]
 struct MyAction { dx: i32, dy: i32 }
 
 impl State for MyState {
@@ -98,6 +98,32 @@ After this, you can query the learned value (Q) for a certain action in a certai
 
 ```rust, ignore
 trainer.expected_value(&state, &action) // : Option<f64>
+```
+
+AgentTrainer implements serialize from serde, so you can convert it into a file. AgentTrainer also has methods for doing this automatically. See the save_load example for more details. 
+```rust, ignore
+use rurel::AgentTrainer;
+use rurel::strategy::learn::QLearning;
+use rurel::strategy::explore::RandomExploration;
+use rurel::strategy::terminate::FixedIterations;
+
+// Create the trainer object. 
+let mut trainer = AgentTrainer::new();
+// import data from the previous training session into the agent. 
+trainer.import_state_from_json("data/grid.json");   // <-- Import data from JSON
+// Set the agents starting state. 
+let mut agent = MyAgent { state: MyState { x: 0, y: 0 }};
+
+// Training configuration
+trainer.train(
+    &mut agent,
+    &QLearning::new(0.2, 0.01, 2.),
+    &mut FixedIterations::new(0),
+    &RandomExploration::new()
+);
+
+// Export learned values to specified JSON file. 
+trainer.export_learned_values_to_json("data/grid.json"); // <-- Export data to JSON
 ```
 
 ## Development

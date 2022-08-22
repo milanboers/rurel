@@ -8,9 +8,9 @@ use rurel::mdp::{Agent, State};
 use rurel::strategy::explore::RandomExploration;
 use rurel::strategy::learn::QLearning;
 use rurel::strategy::terminate::FixedIterations;
-use rurel::AgentTrainer;
+use rurel::{AgentTrainer, *};
 
-#[derive(PartialEq, Eq, Hash, Clone)]
+#[derive(PartialEq, Eq, Hash, Clone, Serialize, Deserialize)]
 struct MyState {
     x: i32,
     y: i32,
@@ -18,7 +18,7 @@ struct MyState {
     maxy: i32,
 }
 
-#[derive(PartialEq, Eq, Hash, Clone)]
+#[derive(PartialEq, Eq, Hash, Clone, Serialize, Deserialize)]
 enum MyAction {
     Move { dx: i32, dy: i32 },
 }
