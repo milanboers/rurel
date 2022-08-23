@@ -90,10 +90,11 @@ use std::fs;
 // serde is necessary to parse the created data into
 // a json file or some other serialized format
 pub extern crate serde;
-use mdp::{Agent, State};
-use serde::ser::SerializeSeq;
+// making de and se public so it can be accessed using rurel::*;
 pub use serde::{Deserialize, Serialize};
+use serde::ser::SerializeSeq;
 
+use mdp::{Agent, State};
 use strategy::explore::ExplorationStrategy;
 use strategy::learn::LearningStrategy;
 use strategy::terminate::TerminationStrategy;
@@ -142,7 +143,8 @@ where
     pub fn export_learned_values_to_json(&self, filepath: &str) {
         use std::io::Write;
         // Create / Overwrite file
-        let mut file = fs::File::create(filepath).expect("Failed to Create File!");
+        let mut file = fs::File::create(filepath)
+            .expect("Failed to Create File!");
         // write the serialized data to JSON then to the file
         file.write_all(serde_json::to_string(&self).unwrap().as_bytes())
             .expect("Failed to write json data to file");
@@ -156,8 +158,8 @@ where
     /// Imports a state from a JSON file, completely replacing any learned progress.  
     pub fn import_state_from_json(&mut self, filepath: &str) {
         // Get string from file
-        let contents =
-            std::fs::read_to_string("data/grid.json").expect("Failed to read file contents!");
+        let contents = std::fs::read_to_string("data/grid.json")
+            .expect("Failed to read file contents!");
         // initialize data container
         let mut data: HashMap<S, HashMap<S::A, f64>> = HashMap::new();
 
@@ -165,8 +167,8 @@ where
         // Else, pull everything out of the file and put it into data.
         if contents != "" {
             // deserialize from vector data
-            let vec_data: Vec<(S, Vec<(S::A, f64)>)> =
-                serde_json::from_str(&contents).expect("Failed to parse JSON File!");
+            let vec_data: Vec<(S, Vec<(S::A, f64)>)> = serde_json::from_str(&contents)
+                .expect("Failed to parse JSON File!");
             // temporary hashmap for holding inner data
             let mut inner: HashMap<S::A, f64> = HashMap::new();
             // iterate through the vector
