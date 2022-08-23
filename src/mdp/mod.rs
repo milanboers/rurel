@@ -4,11 +4,14 @@
 
 use std::hash::Hash;
 
+use serde::de::DeserializeOwned;
+use serde::Serialize;
+
 /// A `State` is something which has a reward, and has a certain set of actions associated with it.
 /// The type of the actions must be defined as the associated type `A`.
-pub trait State: Eq + Hash + Clone {
+pub trait State: Eq + Hash + Clone + Serialize + DeserializeOwned {
     /// Action type associate with this `State`.
-    type A: Eq + Hash + Clone;
+    type A: Eq + Hash + Clone + Serialize + DeserializeOwned;
 
     /// The reward for when an `Agent` arrives at this `State`.
     fn reward(&self) -> f64;

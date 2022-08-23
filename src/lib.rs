@@ -18,10 +18,11 @@
 //!
 //! ```
 //! use rurel::mdp::{State, Agent};
+//! use rurel::*;
 //!
-//! #[derive(PartialEq, Eq, Hash, Clone)]
+//! #[derive(PartialEq, Eq, Hash, Clone, Serialize, Deserialize)]
 //! struct MyState { x: i32, y: i32 }
-//! #[derive(PartialEq, Eq, Hash, Clone)]
+//! #[derive(PartialEq, Eq, Hash, Clone, Serialize, Deserialize)]
 //! struct MyAction { dx: i32, dy: i32 }
 //!
 //! impl State for MyState {
@@ -83,6 +84,15 @@
 mod doc_test {}
 
 use std::collections::HashMap;
+use std::fs;
+
+// making serde available from this crate
+// serde is necessary to parse the created data into
+// a json file or some other serialized format
+pub extern crate serde;
+// making de and se public so it can be accessed using rurel::*;
+pub use serde::{Deserialize, Serialize};
+use serde::ser::SerializeSeq;
 
 use mdp::{Agent, State};
 use strategy::explore::ExplorationStrategy;
@@ -129,9 +139,52 @@ where
         self.q.clone()
     }
 
+    /// writes the data to the indicated JSON file
+    pub fn export_learned_values_to_json(&self, filepath: &str) {
+        use std::io::Write;
+        // Create / Overwrite file
+        let mut file = fs::File::create(filepath)
+            .expect("Failed to Create File!");
+        // write the serialized data to JSON then to the file
+        file.write_all(serde_json::to_string(&self).unwrap().as_bytes())
+            .expect("Failed to write json data to file");
+    }
+
     /// Imports a state, completely replacing any learned progress
     pub fn import_state(&mut self, q: HashMap<S, HashMap<S::A, f64>>) {
         self.q = q;
+    }
+
+    /// Imports a state from a JSON file, completely replacing any learned progress.  
+    pub fn import_state_from_json(&mut self, filepath: &str) {
+        // Get string from file
+        let contents = std::fs::read_to_string("data/grid.json")
+            .expect("Failed to read file contents!");
+        // initialize data container
+        let mut data: HashMap<S, HashMap<S::A, f64>> = HashMap::new();
+
+        // if the contents are empty (no data exists), just begin with an empty hashmap
+        // Else, pull everything out of the file and put it into data.
+        if contents != "" {
+            // deserialize from vector data
+            let vec_data: Vec<(S, Vec<(S::A, f64)>)> = serde_json::from_str(&contents)
+                .expect("Failed to parse JSON File!");
+            // temporary hashmap for holding inner data
+            let mut inner: HashMap<S::A, f64> = HashMap::new();
+            // iterate through the vector
+            for (state, actions) in vec_data.iter() {
+                // clear inner data so no duplicates
+                inner.clear();
+                for (a, r) in actions.iter() {
+                    // put data in inner
+                    inner.insert(a.clone(), r.clone());
+                }
+                // put state and inner in data
+                data.insert(state.clone(), inner.clone());
+            }
+        }
+
+        self.q = data;
     }
 
     /// Returns the best action for the given `State`, or `None` if no values were learned.
@@ -181,5 +234,41 @@ where
 impl<S: State> Default for AgentTrainer<S> {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+/// Added to serialize the data within AgentTrainer for saving and loading.
+impl<S> Serialize for AgentTrainer<S>
+where
+    S: State,
+{
+    fn serialize<SER>(&self, serializer: SER) -> Result<SER::Ok, SER::Error>
+    where
+        SER: serde::Serializer,
+    {
+        // Container we want to convert self.q into
+        let mut vec_data: Vec<(S, Vec<(S::A, f64)>)> = Vec::with_capacity(self.q.len());
+        // temporary vector for holding inner data
+        let mut inner: Vec<(S::A, f64)> = Vec::new();
+        // Iterate over self.q
+        for (state, actions) in self.q.iter() {
+            // clear inner so there are no duplicates
+            inner.clear();
+            for (a, r) in actions.iter() {
+                // fill inner with necessary contents
+                inner.push((a.clone(), *r));
+            }
+            // fill vector data
+            vec_data.push((state.clone(), inner.clone()));
+        }
+
+        // initialize serializer as a sequence, which we can do now since it is a Vec
+        let mut seq = serializer.serialize_seq(Some(self.q.len()))?;
+        // iterate over vec data and serialize each element into the serializer
+        for e in vec_data.iter() {
+            seq.serialize_element(&e)?;
+        }
+        // end serialization
+        seq.end()
     }
 }
