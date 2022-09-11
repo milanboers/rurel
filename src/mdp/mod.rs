@@ -10,8 +10,6 @@ pub trait State: Eq + Hash + Clone {
     /// Action type associate with this `State`.
     type A: Eq + Hash + Clone;
 
-    /// The reward for when an `Agent` arrives at this `State`.
-    fn reward(&self) -> f64;
     /// The set of actions that can be taken from this `State`, to arrive in another `State`.
     fn actions(&self) -> Vec<Self::A>;
     /// Selects a random action that can be taken from this `State`. The default implementation
@@ -31,6 +29,9 @@ pub trait Agent<S: State> {
     fn current_state(&self) -> &S;
     /// Takes the given action, possibly mutating the current `State`.
     fn take_action(&mut self, action: &S::A);
+    /// The reward for when an `Agent` arrives at this `State`.
+    /// The `State` during training must have relevant data so as not to distort the results. So you can add other irrelevant data on the `Agent` to calculate the rewards while keeping the right `State`.
+    fn reward(&self) -> f64;
     /// Takes a random action from the set of possible actions from this `State`. The default
     /// implementation uses [State::random_action()](trait.State.html#method.random_action) to
     /// determine the action to be taken.

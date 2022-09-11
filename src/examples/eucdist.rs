@@ -26,12 +26,6 @@ enum MyAction {
 impl State for MyState {
     type A = MyAction;
 
-    fn reward(&self) -> f64 {
-        let (tx, ty) = (10, 10);
-        let d = (((tx - self.x).pow(2) + (ty - self.y).pow(2)) as f64).sqrt();
-        -d
-    }
-
     fn actions(&self) -> Vec<MyAction> {
         vec![
             MyAction::Move { dx: -1, dy: 0 },
@@ -44,6 +38,7 @@ impl State for MyState {
 
 struct MyAgent {
     state: MyState,
+    irrelevant_data: bool,
 }
 
 impl Agent<MyState> for MyAgent {
@@ -64,6 +59,17 @@ impl Agent<MyState> for MyAgent {
             }
         }
     }
+
+    fn reward(&self) -> f64 {
+        let (tx, ty) = (10, 10);
+        let (x, y) = (self.state.x, self.state.y);
+        let d = (((tx - x).pow(2) + (ty - y).pow(2)) as f64).sqrt();
+        if self.irrelevant_data {
+            -d
+        } else {
+            -d
+        }
+    }
 }
 
 fn main() {
@@ -76,6 +82,7 @@ fn main() {
     let mut trainer = AgentTrainer::new();
     let mut agent = MyAgent {
         state: initial_state.clone(),
+        irrelevant_data: true,
     };
     trainer.train(
         &mut agent,

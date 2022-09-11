@@ -21,9 +21,9 @@ cargo run --example eucdist
 ## Getting started
 There are two main traits you need to implement: `rurel::mdp::State` and `rurel::mdp::Agent`.
 
-A `State` is something which defines a `Vec` of actions that can be taken from this state, and has a certain reward. A `State` needs to define the corresponding action type `A`.
+A `State` is something which defines a `Vec` of actions that can be taken from this relevant state. A `State` needs to define the corresponding action type `A`.
 
-An `Agent` is something which has a current state, and given an action, can take the action and evaluate the next state.
+An `Agent` is something which has a current state, and given an action, can take the action, evaluate the next state and has a certain reward calculated with relevant (fields from `State`) and irrelevant (fields from `Agent`) state.
 
 ### Example
 
@@ -41,10 +41,6 @@ struct MyAction { dx: i32, dy: i32 }
 
 impl State for MyState {
 	type A = MyAction;
-	fn reward(&self) -> f64 {
-		// Negative Euclidean distance
-		-((((10 - self.x).pow(2) + (10 - self.y).pow(2)) as f64).sqrt())
-	}
 	fn actions(&self) -> Vec<MyAction> {
 		vec![MyAction { dx: 0, dy: -1 },	// up
 			 MyAction { dx: 0, dy: 1 },	// down
@@ -60,7 +56,7 @@ Then define the agent:
 ```rust, ignore
 use rurel::mdp::Agent;
 
-struct MyAgent { state: MyState }
+struct MyAgent { state: MyState, irrelevant_data: bool }
 impl Agent<MyState> for MyAgent {
 	fn current_state(&self) -> &MyState {
 		&self.state
@@ -75,6 +71,17 @@ impl Agent<MyState> for MyAgent {
 			}
 		}
 	}
+    fn reward(&self) -> f64 {
+		// Negative Euclidean distance
+        let (tx, ty) = (10, 10);
+        let (x, y) = (self.state.x, self.state.y);
+        let d = (((tx - x).pow(2) + (ty - y).pow(2)) as f64).sqrt();
+        if self.irrelevant_data {
+            -d
+        } else {
+            -d
+        }
+    }
 }
 ```
 
@@ -87,7 +94,7 @@ use rurel::strategy::explore::RandomExploration;
 use rurel::strategy::terminate::FixedIterations;
 
 let mut trainer = AgentTrainer::new();
-let mut agent = MyAgent { state: MyState { x: 0, y: 0 }};
+let mut agent = MyAgent { state: MyState { x: 0, y: 0 }, irrelevant_data: true};
 trainer.train(&mut agent,
               &QLearning::new(0.2, 0.01, 2.),
               &mut FixedIterations::new(100000),

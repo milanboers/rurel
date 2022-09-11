@@ -39,7 +39,7 @@
 //!     }
 //! }
 //!
-//! struct MyAgent { state: MyState }
+//! struct MyAgent { state: MyState, irrelevant_data: bool }
 //! impl Agent<MyState> for MyAgent {
 //!     fn current_state(&self) -> &MyState {
 //!         &self.state
@@ -54,6 +54,16 @@
 //!             }
 //!         }
 //!     }
+//!     fn reward(&self) -> f64 {
+//!         let (tx, ty) = (10, 10);
+//!         let (x, y) = (self.state.x, self.state.y);
+//!         let d = (((tx - x).pow(2) + (ty - y).pow(2)) as f64).sqrt();
+//!         if self.irrelevant_data {
+//!             -d
+//!         } else {
+//!             -d
+//!         }
+//!     }
 //! }
 //!
 //! use rurel::AgentTrainer;
@@ -62,7 +72,7 @@
 //! use rurel::strategy::terminate::FixedIterations;
 //!
 //! let mut trainer = AgentTrainer::new();
-//! let mut agent = MyAgent { state: MyState { x: 0, y: 0 }};
+//! let mut agent = MyAgent { state: MyState { x: 0, y: 0 }, irrelevant_data: true};
 //! trainer.train(&mut agent,
 //!               &QLearning::new(0.2, 0.01, 2.),
 //!               &mut FixedIterations::new(100000),
@@ -159,7 +169,7 @@ where
 
             // current action value
             let s_t_next = agent.current_state();
-            let r_t_next = s_t_next.reward();
+            let r_t_next = agent.reward();
 
             let v = {
                 let old_value = self.q.get(&s_t).and_then(|m| m.get(&action));
