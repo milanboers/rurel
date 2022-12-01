@@ -129,6 +129,11 @@ where
         self.q.clone()
     }
 
+    // Returns a reference to the learned state.
+    pub fn learned_values(&self) -> &HashMap<S, HashMap<S::A, f64>> {
+        &self.q
+    }
+
     /// Imports a state, completely replacing any learned progress
     pub fn import_state(&mut self, q: HashMap<S, HashMap<S::A, f64>>) {
         self.q = q;
