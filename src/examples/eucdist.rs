@@ -83,8 +83,8 @@ fn main() {
         &mut FixedIterations::new(100000),
         &RandomExploration::new(),
     );
-    for i in 0..21 {
-        for j in 0..21 {
+    for j in 0..21 {
+        for i in 0..21 {
             let entry: &HashMap<MyAction, f64> = trainer
                 .expected_values(&MyState {
                     x: i,
@@ -92,8 +92,18 @@ fn main() {
                     ..initial_state
                 })
                 .unwrap();
-            let val: f64 = entry.values().sum();
-            print!("{val:.3}\t");
+            let best_action = entry
+                .iter()
+                .max_by(|(_, v1), (_, v2)| v1.partial_cmp(v2).unwrap())
+                .map(|(v, _)| v)
+                .unwrap();
+            match best_action {
+                MyAction::Move { dx: -1, dy: 0 } => print!("<"),
+                MyAction::Move { dx: 1, dy: 0 } => print!(">"),
+                MyAction::Move { dx: 0, dy: -1 } => print!("^"),
+                MyAction::Move { dx: 0, dy: 1 } => print!("v"),
+                _ => unreachable!(),
+            };
         }
         println!();
     }
