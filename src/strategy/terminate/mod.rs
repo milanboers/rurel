@@ -5,9 +5,11 @@
 //! Module containing termination strategies.
 
 pub use self::fixed_iterations::FixedIterations;
+pub use self::sink_states::SinkStates;
 use crate::mdp::State;
 
 pub mod fixed_iterations;
+pub mod sink_states;
 
 /// A termination strategy decides when to end training.
 pub trait TerminationStrategy<S: State> {

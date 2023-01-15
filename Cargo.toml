@@ -21,3 +21,8 @@ rand = "0.8"
 [[example]]
 name = "eucdist"
 path = "src/examples/eucdist.rs"
+
+
+[[example]]
+name = "weightedcoin"
+path = "src/examples/weightedcoin.rs"
