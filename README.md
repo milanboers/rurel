@@ -1,6 +1,5 @@
 # Rurel
 
-[![Build Status](https://travis-ci.org/milanboers/rurel.svg?branch=master)](https://travis-ci.org/milanboers/rurel)
 [![crates.io](https://img.shields.io/crates/v/rurel.svg)](https://crates.io/crates/rurel)
 
 Rurel is a flexible, reusable reinforcement learning (Q learning) implementation in Rust.
