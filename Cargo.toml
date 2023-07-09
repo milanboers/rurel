@@ -7,7 +7,7 @@ documentation = "https://docs.rs/rurel"
 homepage = "https://github.com/milanboers/rurel"
 repository = "https://github.com/milanboers/rurel"
 readme = "README.md"
-keywords = ["reinforcement", "q", "learning"]
+keywords = ["reinforcement", "q", "learning", "dqn"]
 categories = ["science", "algorithms"]
 license = "MPL-2.0"
 edition = "2021"
@@ -15,8 +15,13 @@ edition = "2021"
 [badges]
 travis-ci = { repository = "milanboers/rurel", branch = "master" }
 
+[features]
+default = []
+dqn = ["dfdx"]
+
 [dependencies]
 rand = "0.8"
+dfdx = { version = "0.11.2", optional = true }
 
 [[example]]
 name = "eucdist"
@@ -26,3 +31,7 @@ path = "src/examples/eucdist.rs"
 [[example]]
 name = "weightedcoin"
 path = "src/examples/weightedcoin.rs"
+
+[[example]]
+name = "eucdist_dqn"
+path = "src/examples/eucdist_dqn.rs"

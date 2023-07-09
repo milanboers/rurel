@@ -89,6 +89,8 @@ use strategy::explore::ExplorationStrategy;
 use strategy::learn::LearningStrategy;
 use strategy::terminate::TerminationStrategy;
 
+#[cfg(feature = "dqn")]
+pub mod dqn;
 pub mod mdp;
 pub mod strategy;
 
