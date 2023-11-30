@@ -173,10 +173,7 @@ where
                 learning_strategy.value(&self.q.get(s_t_next), &old_value, r_t_next)
             };
 
-            self.q
-                .entry(s_t)
-                .or_insert_with(HashMap::new)
-                .insert(action, v);
+            self.q.entry(s_t).or_default().insert(action, v);
 
             if termination_strategy.should_stop(s_t_next) {
                 break;

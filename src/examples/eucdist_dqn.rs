@@ -20,22 +20,22 @@ struct MyState {
 }
 
 // Into float array has to be implemented for the DQN state
-impl Into<[f32; 6]> for MyState {
-    fn into(self) -> [f32; 6] {
+impl From<MyState> for [f32; 6] {
+    fn from(val: MyState) -> Self {
         [
-            self.tx as f32,
-            self.ty as f32,
-            self.x as f32,
-            self.y as f32,
-            self.maxx as f32,
-            self.maxy as f32,
+            val.tx as f32,
+            val.ty as f32,
+            val.x as f32,
+            val.y as f32,
+            val.maxx as f32,
+            val.maxy as f32,
         ]
     }
 }
 
 // From float array has to be implemented for the DQN state
-impl From<[f32; 4]> for MyState {
-    fn from(v: [f32; 4]) -> Self {
+impl From<[f32; 6]> for MyState {
+    fn from(v: [f32; 6]) -> Self {
         MyState {
             tx: v[0] as i32,
             ty: v[1] as i32,
@@ -54,9 +54,9 @@ enum MyAction {
 
 // Into float array has to be implemented for the action,
 // so that the DQN can use it.
-impl Into<[f32; 4]> for MyAction {
-    fn into(self) -> [f32; 4] {
-        match self {
+impl From<MyAction> for [f32; 4] {
+    fn from(val: MyAction) -> Self {
+        match val {
             MyAction::Move { dx: -1, dy: 0 } => [1.0, 0.0, 0.0, 0.0],
             MyAction::Move { dx: 1, dy: 0 } => [0.0, 1.0, 0.0, 0.0],
             MyAction::Move { dx: 0, dy: -1 } => [0.0, 0.0, 1.0, 0.0],

@@ -28,9 +28,9 @@ type QNetworkDevice<const STATE_SIZE: usize, const ACTION_SIZE: usize, const INN
 /// training, the `DQNAgentTrainer` contains learned knowledge about the process, and can be queried
 /// for this. For example, you can ask the `DQNAgentTrainer` the expected values of all possible
 /// actions in a given state.
-/// 
+///
 /// The code is partially taken from https://github.com/coreylowman/dfdx/blob/main/examples/rl-dqn.rs.
-/// 
+///
 pub struct DQNAgentTrainer<
     S,
     const STATE_SIZE: usize,
