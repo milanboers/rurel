@@ -131,6 +131,7 @@ where
         Some(target.into())
     }
 
+    #[allow(clippy::boxed_local)]
     pub fn train_dqn(
         &mut self,
         states: Box<[[f32; STATE_SIZE]; BATCH]>,
