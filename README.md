@@ -8,7 +8,7 @@ Rurel is a flexible, reusable reinforcement learning (Q learning) implementation
 
 In Cargo.toml:
 ```toml
-rurel = "0.5.1"
+rurel = "0.6.0"
 ```
 
 
